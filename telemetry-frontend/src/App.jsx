@@ -58,9 +58,21 @@ function App() {
         {isPolling ? 'Stop' : 'Start'}
       </button>
 
-      <TelemetryChart label="Speed" data={speedData} color="green" />
-      <TelemetryChart label="Throttle" data={throttleData} color="blue" />
-      <TelemetryChart label="Brake" data={brakeData} color="red" />
+      <TelemetryChart
+        label="Speed"
+        datasets={[
+          { label: "Speed", data: speedData, color: "green" }
+        ]}
+      />
+
+      <TelemetryChart
+        label="Throttle & Brake"
+        datasets={[
+          { label: "Throttle", data: throttleData, color: "blue" },
+          { label: "Brake", data: brakeData, color: "red" }
+        ]}
+      />
+
     </div>
   );
 }
