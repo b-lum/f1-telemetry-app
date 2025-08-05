@@ -9,26 +9,26 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
-export default function TelemetryChart({ label, data, color }) {
-   const chartData = {
-      labels: Array(data.length).fill(''),
-      datasets: [{
-         label,
-         data,
-         borderColor: color,
-         tension: 0.3,
-      }]
-   };
+export default function TelemetryChart({ label, datasets }) {
+  const chartData = {
+    labels: Array(datasets[0].data.length).fill(''),
+    datasets: datasets.map(ds => ({
+      label: ds.label,
+      data: ds.data,
+      borderColor: ds.color,
+      tension: 0.3,
+    }))
+  };
 
-   const options = {
-      animation: false,
-      scales: {
-         y: {
-            min: 0,
-            max: label === 'Speed' ? 400 : 1
-         }
+  const options = {
+    animation: false,
+    scales: {
+      y: {
+        min: 0,
+        max: label === 'Speed' ? 400 : 1
       }
-   };
+    }
+  };
 
-   return <Line data={chartData} options={options} />;
+  return <Line data={chartData} options={options} />;
 }
