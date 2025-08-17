@@ -9,6 +9,16 @@ udp_socket.bind(('0.0.0.0', 20777))
 udp_socket.settimeout(0.05)  # Timeout after 50ms
 
 
+def get_next_packet():
+    try:
+        data, _ = udp_socket.recvfrom(2048)
+        packet = unpack_udp_packet(data)
+        return packet
+    except socket.timeout:
+        return None
+
+
+
 def get_latest_telemetry() :
     try:
         data, _ = udp_socket.recvfrom(2048)
@@ -45,7 +55,7 @@ def get_fake_telemetry() :
     # Return a copy so external code can’t mutate internal state accidentally
     return dict(last_fake)
 
-def get_session_id():
+#def get_session_id():
     try:
         data, _ = udp_socket.recvfrom(2048)
         packet = unpack_udp_packet(data)
@@ -57,3 +67,6 @@ def get_session_id():
     except Exception as e:
         print(f"Error in telemetry: {e}")
         return get_fake_telemetry()
+    
+
+
