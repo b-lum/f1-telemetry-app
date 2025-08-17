@@ -4,15 +4,13 @@ from collections import deque
 class Lap :
 
    def __init__(self, lap_number):
-      self.times = deque()
-      self.data = map()
+      self.data = {}
       self.lap_number = lap_number
       self.lap_time = None
    
    # accepts telemetry_data object
    def add_data(self, data) :
       self.data[data.time] = data
-      self.times.append(data.time)
    
    # return array with averages [speed, throttle, brake]
    def get_avg(self) :
