@@ -13,12 +13,12 @@ load_dotenv()
 
 app = FastAPI()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+#DATABASE_URL = os.getenv("DATABASE_URL")
 
 # State
 sessions = {}
 latest_session_time = None
-db_pool = None
+#db_pool = None
 
 # CORS
 app.add_middleware(
@@ -32,14 +32,14 @@ app.add_middleware(
 # Startup
 @app.on_event("startup")
 async def startup():
-    global db_pool
-    db_pool = await asyncpg.create_pool(DATABASE_URL)
+    #global db_pool
+    #db_pool = await asyncpg.create_pool(DATABASE_URL)
     print("Database pool created")
 
 # Shutdown
 @app.on_event("shutdown")
 async def shutdown():
-    await db_pool.close()
+    #await db_pool.close()
     print("Database pool closed")
 
 # DB save helper
@@ -71,17 +71,10 @@ async def telemetry_generator(websocket: WebSocket):
 
             # ---- Motion packet (wheel slip) ----
             if packet.header.packetId == 0:
-                # Packet gives wheelSlip in F1 UDP order: [FL, FR, RL, RR]
-                # Rearrange to [RL, RR, FL, FR] for frontend
-                wheel_slip = [
-                    packet.wheelSlip[2],  # RL
-                    packet.wheelSlip[3],  # RR
-                    packet.wheelSlip[0],  # FL
-                    packet.wheelSlip[1],  # FR
-                ]
+                # Packet gives wheelSlip in F1 UDP order: [RL, RR, FL, FR]
                 await websocket.send_json({
                     "packetType": "motion",
-                    "wheelSlip": wheel_slip
+                    "wheelSlip": list(packet.wheelSlip)
                 })
 
             # ---- Lap data ----
