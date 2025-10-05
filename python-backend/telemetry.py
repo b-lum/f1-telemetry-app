@@ -68,5 +68,3 @@ def get_fake_telemetry() :
         print(f"Error in telemetry: {e}")
         return get_fake_telemetry()
     
-
-
